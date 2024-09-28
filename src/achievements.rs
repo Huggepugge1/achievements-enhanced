@@ -2,7 +2,7 @@ use chrono::{DateTime, Local};
 use serde_json;
 use std::fs::File;
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub enum ProgrammingLanguage {
     C,
     Java,
@@ -11,14 +11,14 @@ pub enum ProgrammingLanguage {
     NoLanguage,
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub enum AchievementLanguage {
     Single(ProgrammingLanguage),
     Both(ProgrammingLanguage, ProgrammingLanguage),
     Either(ProgrammingLanguage, ProgrammingLanguage),
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Sprint {
     Sprint1,
     Sprint2,
@@ -28,7 +28,7 @@ pub enum Sprint {
     Unclear,
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub enum PresentationType {
     Lab,
     Studium,
@@ -36,7 +36,7 @@ pub enum PresentationType {
     Report,
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub enum AchievementPresention {
     Single(PresentationType),
     Either(PresentationType, PresentationType),
