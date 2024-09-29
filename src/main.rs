@@ -337,18 +337,82 @@ impl eframe::App for Application {
         }
 
         egui::CentralPanel::default().show(ctx, |ui| {
+            egui::menu::bar(ui, |ui| {
+                let file_button = ui.button(egui::RichText::new("File").font(egui::FontId::new(
+                    self.settings.font_size * 1.5,
+                    egui::FontFamily::Proportional,
+                )));
+                let file_popup_id = ui.make_persistent_id("File popup");
+                egui::containers::popup::popup_below_widget(ui, file_popup_id, &file_button, egui::containers::popup::PopupCloseBehavior::CloseOnClickOutside, |ui| {
+                    let save_button = ui.label("Save").on_hover_cursor(egui::CursorIcon::PointingHand);
+                    if save_button.hovered() {
+                        save_button.clone().highlight();
+                    }
+                    if save_button.clicked() {
+                        self.save_achievements();
+                        ui.memory_mut(|memory| {
+                            memory.close_popup();
+                        });
+                    }
+                });
+                let edit_button = ui.button(egui::RichText::new("Edit").font(egui::FontId::new(
+                    self.settings.font_size * 1.5,
+                    egui::FontFamily::Proportional,
+                )));
+                let edit_popup_id = ui.make_persistent_id("Edit popup");
+                egui::containers::popup::popup_below_widget(ui, edit_popup_id, &edit_button, egui::containers::popup::PopupCloseBehavior::CloseOnClickOutside, |ui| {
+                    let clear_done_button = ui.label("Clear Done").on_hover_cursor(egui::CursorIcon::PointingHand);
+                    if clear_done_button.hovered() {
+                        clear_done_button.clone().highlight();
+                    }
+                    if clear_done_button.clicked() {
+                        self.clear_done();
+                        ui.memory_mut(|memory| {
+                            memory.close_popup();
+                        });
+                    }
+                    let clear_present_soon_button = ui.label("Clear Present Soon").on_hover_cursor(egui::CursorIcon::PointingHand);
+                    if clear_present_soon_button.hovered() {
+                        clear_present_soon_button.clone().highlight();
+                    }
+                    if clear_present_soon_button.clicked() {
+                        self.clear_present_soon();
+                        ui.memory_mut(|memory| {
+                            memory.close_popup();
+                        });
+                    }
+                    let clear_filters_button = ui.label("Clear Filters").on_hover_cursor(egui::CursorIcon::PointingHand);
+                    if clear_filters_button.hovered() {
+                        clear_filters_button.clone().highlight();
+                    }
+                    if clear_filters_button.clicked() {
+                        self.filters = Filters::new();
+                        ui.memory_mut(|memory| {
+                            memory.close_popup();
+                        });
+                    }
+                });
+                if file_button.clicked() {
+                    ui.memory_mut(|memory| {
+                        memory.open_popup(file_popup_id);
+                    });
+                } else if edit_button.clicked() {
+                    ui.memory_mut(|memory| {
+                        memory.open_popup(edit_popup_id);
+                    });
+                }
+
+            });
             ui.horizontal_centered(|ui| {
                 ctx.style_mut(|ctx| {
                     ctx.wrap_mode = Some(egui::TextWrapMode::Extend);
                     ctx.override_font_id = Some(egui::FontId::new(
                         self.settings.font_size,
-                        egui::FontFamily::Monospace,
+                        egui::FontFamily::Proportional,
                     ));
                 });
 
-                let max_width = ui.available_width();
-                let max_height = ui.available_height();
-                egui::ScrollArea::both().scroll_bar_rect(egui::Rect::from_min_max(egui::Pos2::new(max_width - 5.0, 0.0), egui::Pos2::new(max_width, max_height))).show(ui, |ui| {
+                egui::ScrollArea::both().stick_to_right(true).show(ui, |ui| {
                     ui.vertical_centered(|ui| {
                         let achievements = self.filtered_achievements()
                             .into_iter()
@@ -535,6 +599,7 @@ impl eframe::App for Application {
                                     }
                                         .on_hover_cursor(egui::CursorIcon::PointingHand)
                                         .on_hover_text("Right click to filter out");
+                                    ui.allocate_space(egui::vec2(10.0, 0.0));
 
                                     if id.clicked_by(egui::PointerButton::Secondary) {
                                         self.filters.id.push(achievement.id.clone());
@@ -571,22 +636,6 @@ impl eframe::App for Application {
                             });
                     });
                 });
-                let save_button = ui.button("Save");
-                if save_button.clicked() {
-                    self.save_achievements();
-                }
-                let clear_done_button = ui.button("Clear Done");
-                if clear_done_button.clicked() {
-                    self.clear_done();
-                }
-                let clear_present_soon_button = ui.button("Clear Present Soon");
-                if clear_present_soon_button.clicked() {
-                    self.clear_present_soon();
-                }
-                let clear_filters_button = ui.button("Clear Filters");
-                if clear_filters_button.clicked() {
-                    self.filters = Filters::new();
-                }
             });
         });
     }
