@@ -1,11 +1,10 @@
+mod achievement_csv;
 mod achievements;
 
 use eframe::{egui, CreationContext, NativeOptions};
 use serde;
-use serde_json;
 
-use std::fs::File;
-use std::io::prelude::*;
+use csv;
 
 use std::fmt::Display;
 
@@ -165,7 +164,13 @@ struct Application {
 
 impl Application {
     fn new(_cc: &CreationContext) -> Self {
-        let achievements = achievements::get_all_achievements();
+        let achievements = match achievement_csv::read_achievements_from_gui() {
+            Ok(achievements) => achievements,
+            Err(_) => match achievement_csv::read_achievements_from_google_sheets() {
+                Ok(achievements) => achievements,
+                Err(_) => panic!("Could not read achievements from csv"),
+            },
+        };
 
         Self {
             settings: Settings {
@@ -178,20 +183,28 @@ impl Application {
         }
     }
 
-    fn save_achievements(&self) {
-        let mut done = Vec::new();
-        let mut present_soon = Vec::new();
-        let mut achievements = self.achievements.clone();
-        achievements.sort_by(|a, b| a.id.cmp(&b.id));
-        for achievement in achievements.iter() {
-            done.push(achievement.done);
-            present_soon.push(achievement.present_soon);
+    fn save_achievements(&self) -> Result<(), csv::Error> {
+        let mut wtr = csv::Writer::from_path("achievements.csv")?;
+        for achievement in self.achievements.clone() {
+            let serializable_achievement = achievements::SerializableAchievement {
+                id: achievement.id.clone(),
+                link: achievement.link.clone(),
+                title: achievement.title.clone(),
+                deadline: achievement
+                    .deadline
+                    .map(|x| x.format("%b %d, %Y").to_string()),
+                done: achievement.done,
+                present_soon: achievement.present_soon,
+                grade: achievement.grade,
+                presenting_type: achievement.presenting_type.clone(),
+                programming_language: achievement.programming_language.clone(),
+                sprint: achievement.sprint.clone(),
+                comment: achievement.comment.clone(),
+            };
+            println!("{:?}", serializable_achievement);
+            wtr.serialize(serializable_achievement)?;
         }
-        let json_save = JsonSave { done, present_soon };
-
-        let json = serde_json::to_string(&json_save).unwrap();
-        let mut file = File::create("achievements.json").unwrap();
-        file.write_all(json.as_bytes()).unwrap();
+        Ok(())
     }
 
     fn clear_done(&mut self) {
@@ -323,12 +336,14 @@ struct JsonSave {
 
 impl eframe::App for Application {
     fn on_exit(&mut self, _ctx: Option<&eframe::glow::Context>) {
-        self.save_achievements();
+        if let Err(e) = self.save_achievements() {
+            eprintln!("Error saving achievements: {}", e);
+        };
     }
     fn update(&mut self, ctx: &eframe::egui::Context, _frame: &mut eframe::Frame) {
         ctx.send_viewport_cmd(egui::ViewportCommand::Maximized(true));
+
         if ctx.input(|i| i.key_pressed(egui::Key::Q) && i.modifiers.ctrl) {
-            self.save_achievements();
             ctx.send_viewport_cmd(egui::ViewportCommand::Close)
         }
 
@@ -560,8 +575,8 @@ impl eframe::App for Application {
                                         achievements::AchievementPresention::Single(presenting_type) => {
                                             ui.label(format!("{:?}", presenting_type))
                                         },
-                                        achievements::AchievementPresention::Either(presenting_type1, presenting_type2) => {
-                                            ui.label(format!("{:?} OR {:?}", presenting_type1, presenting_type2))
+                                        achievements::AchievementPresention::Either { first, second } => {
+                                            ui.label(format!("{:?} OR {:?}", first, second))
                                         },
                                     }
                                         .on_hover_cursor(egui::CursorIcon::PointingHand)
@@ -575,11 +590,11 @@ impl eframe::App for Application {
                                                 ui.label(format!("{:?}", programming_language))
                                             }
                                         },
-                                        achievements::AchievementLanguage::Both(programming_language1, programming_language2) => {
-                                            ui.label(format!("{:?} AND {:?}", programming_language1, programming_language2))
+                                        achievements::AchievementLanguage::Both { first, second } => {
+                                            ui.label(format!("{:?} AND {:?}", first, second))
                                         },
-                                        achievements::AchievementLanguage::Either(programming_language1, programming_language2) => {
-                                            ui.label(format!("{:?} OR {:?}", programming_language1, programming_language2))
+                                        achievements::AchievementLanguage::Either { first, second } => {
+                                            ui.label(format!("{:?} OR {:?}", first, second))
                                         },
                                     }
                                         .on_hover_cursor(egui::CursorIcon::PointingHand)
@@ -641,7 +656,7 @@ impl eframe::App for Application {
     }
 }
 
-fn main() -> eframe::Result {
+fn main() -> Result<(), eframe::Error> {
     let native_options = NativeOptions::default();
 
     eframe::run_native(
