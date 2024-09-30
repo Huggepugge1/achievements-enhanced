@@ -196,12 +196,11 @@ impl Application {
                 done: achievement.done,
                 present_soon: achievement.present_soon,
                 grade: achievement.grade,
-                presenting_type: achievement.presenting_type.clone(),
-                programming_language: achievement.programming_language.clone(),
+                presenting_type: achievement.presenting_type.to_string(),
+                programming_language: achievement.programming_language.to_string(),
                 sprint: achievement.sprint.clone(),
                 comment: achievement.comment.clone(),
             };
-            println!("{:?}", serializable_achievement);
             wtr.serialize(serializable_achievement)?;
         }
         Ok(())
@@ -348,7 +347,9 @@ impl eframe::App for Application {
         }
 
         if ctx.input(|i| i.key_pressed(egui::Key::S) && i.modifiers.ctrl) {
-            self.save_achievements();
+            if let Err(e) = self.save_achievements() {
+                eprintln!("Error saving achievements: {}", e);
+            };
         }
 
         egui::CentralPanel::default().show(ctx, |ui| {
@@ -364,7 +365,9 @@ impl eframe::App for Application {
                         save_button.clone().highlight();
                     }
                     if save_button.clicked() {
-                        self.save_achievements();
+                        if let Err(e) = self.save_achievements() {
+                            eprintln!("Error saving achievements: {}", e);
+                        };
                         ui.memory_mut(|memory| {
                             memory.close_popup();
                         });

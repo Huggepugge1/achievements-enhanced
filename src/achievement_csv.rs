@@ -34,8 +34,12 @@ pub fn read_achievements_from_gui() -> Result<Vec<Achievement>, csv::Error> {
             done: serialized_achievement.done,
             present_soon: serialized_achievement.present_soon,
             grade: serialized_achievement.grade,
-            presenting_type: serialized_achievement.presenting_type,
-            programming_language: serialized_achievement.programming_language,
+            presenting_type: AchievementPresention::from_string(
+                serialized_achievement.presenting_type,
+            ),
+            programming_language: AchievementLanguage::from_string(
+                serialized_achievement.programming_language,
+            ),
             sprint: serialized_achievement.sprint,
             comment: serialized_achievement.comment,
         });
@@ -93,7 +97,7 @@ pub fn read_achievements_from_google_sheets() -> Result<Vec<Achievement>, csv::E
                 first: ProgrammingLanguage::C,
                 second: ProgrammingLanguage::Java,
             },
-            _ => panic!("Unknown programming language"),
+            e => panic!("Unknown programming language {e}"),
         };
         let sprint = match &result[9] {
             "Sprint 1" => Sprint::Sprint1,
@@ -103,7 +107,7 @@ pub fn read_achievements_from_google_sheets() -> Result<Vec<Achievement>, csv::E
             "Project" => Sprint::Project,
             "Projekt" => Sprint::Project,
             "IDK" => Sprint::Unclear,
-            v => panic!("Unknown sprint {}", v),
+            e => panic!("Unknown sprint {e}"),
         };
         let comment = match &result[10] {
             "" => None,

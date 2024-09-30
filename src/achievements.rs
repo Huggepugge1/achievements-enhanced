@@ -11,8 +11,19 @@ pub enum ProgrammingLanguage {
     NoLanguage,
 }
 
+impl std::fmt::Display for ProgrammingLanguage {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match self {
+            ProgrammingLanguage::C => write!(f, "C"),
+            ProgrammingLanguage::Java => write!(f, "Java"),
+            ProgrammingLanguage::Git => write!(f, "Git"),
+            ProgrammingLanguage::Bash => write!(f, "Terminal"),
+            ProgrammingLanguage::NoLanguage => write!(f, "Essä"),
+        }
+    }
+}
+
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, serde::Deserialize, serde::Serialize)]
-#[serde(tag = "type")]
 pub enum AchievementLanguage {
     Single(ProgrammingLanguage),
     Both {
@@ -23,6 +34,39 @@ pub enum AchievementLanguage {
         first: ProgrammingLanguage,
         second: ProgrammingLanguage,
     },
+}
+
+impl std::fmt::Display for AchievementLanguage {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match self {
+            AchievementLanguage::Single(lang) => write!(f, "{}", lang),
+            AchievementLanguage::Both { first, second } => write!(f, "{}&{}", first, second),
+            AchievementLanguage::Either { first, second } => write!(f, "{}/{}", first, second),
+        }
+    }
+}
+
+impl AchievementLanguage {
+    pub fn from_string(string: String) -> AchievementLanguage {
+        match string.as_str() {
+            "C" => AchievementLanguage::Single(ProgrammingLanguage::C),
+            "Java" => AchievementLanguage::Single(ProgrammingLanguage::Java),
+            "Terminal" => AchievementLanguage::Single(ProgrammingLanguage::Bash),
+            "Git" => AchievementLanguage::Single(ProgrammingLanguage::Git),
+            "Essä" => AchievementLanguage::Single(ProgrammingLanguage::NoLanguage),
+            "Möte" => AchievementLanguage::Single(ProgrammingLanguage::NoLanguage),
+            "C&Java" => AchievementLanguage::Both {
+                first: ProgrammingLanguage::C,
+                second: ProgrammingLanguage::Java,
+            },
+            "C/Java" => AchievementLanguage::Either {
+                first: ProgrammingLanguage::C,
+                second: ProgrammingLanguage::Java,
+            },
+            "NoLanguage" => AchievementLanguage::Single(ProgrammingLanguage::NoLanguage),
+            e => panic!("Unknown programming language {e}"),
+        }
+    }
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, serde::Deserialize, serde::Serialize)]
@@ -43,14 +87,49 @@ pub enum PresentationType {
     Report,
 }
 
+impl std::fmt::Display for PresentationType {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match self {
+            PresentationType::Lab => write!(f, "Lab"),
+            PresentationType::Studium => write!(f, "Studium"),
+            PresentationType::Special => write!(f, "Special"),
+            PresentationType::Report => write!(f, "Report"),
+        }
+    }
+}
+
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, serde::Deserialize, serde::Serialize)]
-#[serde(tag = "type")]
 pub enum AchievementPresention {
     Single(PresentationType),
     Either {
         first: PresentationType,
         second: PresentationType,
     },
+}
+
+impl std::fmt::Display for AchievementPresention {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match self {
+            AchievementPresention::Single(presentation) => write!(f, "{}", presentation),
+            AchievementPresention::Either { first, second } => write!(f, "{}, {}", first, second),
+        }
+    }
+}
+
+impl AchievementPresention {
+    pub fn from_string(string: String) -> AchievementPresention {
+        match string.as_str() {
+            "Lab" => AchievementPresention::Single(PresentationType::Lab),
+            "Studium" => AchievementPresention::Single(PresentationType::Studium),
+            "Special" => AchievementPresention::Single(PresentationType::Special),
+            "Lab, Studium" => AchievementPresention::Either {
+                first: PresentationType::Lab,
+                second: PresentationType::Studium,
+            },
+            "Report" => AchievementPresention::Single(PresentationType::Report),
+            _ => panic!("Unknown presentation type"),
+        }
+    }
 }
 
 #[derive(Clone, Debug)]
@@ -77,10 +156,8 @@ pub struct SerializableAchievement {
     pub done: bool,
     pub present_soon: bool,
     pub grade: i8,
-    #[serde(flatten)]
-    pub presenting_type: AchievementPresention,
-    #[serde(flatten)]
-    pub programming_language: AchievementLanguage,
+    pub presenting_type: String,
+    pub programming_language: String,
     pub sprint: Sprint,
     pub comment: Option<String>,
 }
