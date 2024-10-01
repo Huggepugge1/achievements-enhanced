@@ -17,7 +17,6 @@ pub fn read_achievements_from_gui() -> Result<Vec<Achievement>, csv::Error> {
     for serialized_achievement in serialized_achievements {
         achievements.push(Achievement {
             id: serialized_achievement.id,
-            link: serialized_achievement.link,
             title: serialized_achievement.title,
             deadline: if serialized_achievement.deadline == None {
                 None
@@ -54,7 +53,6 @@ pub fn read_achievements_from_google_sheets() -> Result<Vec<Achievement>, csv::E
     for result in rdr.records() {
         let result = result.unwrap();
         let id = result[0].to_string();
-        let link = result[1].to_string();
         let title = result[2].to_string();
         let deadline = match &result[3] {
             "" => None,
@@ -116,7 +114,6 @@ pub fn read_achievements_from_google_sheets() -> Result<Vec<Achievement>, csv::E
 
         achievements.push(Achievement {
             id,
-            link,
             title,
             deadline,
             done,

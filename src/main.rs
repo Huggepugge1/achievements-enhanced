@@ -188,7 +188,6 @@ impl Application {
         for achievement in self.achievements.clone() {
             let serializable_achievement = achievements::SerializableAchievement {
                 id: achievement.id.clone(),
-                link: achievement.link.clone(),
                 title: achievement.title.clone(),
                 deadline: achievement
                     .deadline
@@ -531,7 +530,7 @@ impl eframe::App for Application {
                                                 egui::FontFamily::Monospace,
                                             ))
                                             .text_style(egui::TextStyle::Monospace),
-                                        format!("https://uppsala.instructure.com/courses/97453/pages/achievements#{}", achievement.link),
+                                        format!("https://uppsala.instructure.com/courses/97453/pages/achievements#{}", achievement.id[1..].to_string()),
                                     ))
                                         .on_hover_cursor(egui::CursorIcon::PointingHand)
                                         .on_hover_text("Right click to filter out");
@@ -544,7 +543,7 @@ impl eframe::App for Application {
                                             ))
                                             .color(egui::Color32::LIGHT_GRAY)
                                             .text_style(egui::TextStyle::Monospace),
-                                        format!("https://uppsala.instructure.com/courses/97453/pages/achievements#{}", achievement.link),
+                                        format!("https://uppsala.instructure.com/courses/97453/pages/achievements#{}", achievement.id[1..].to_string()),
                                     ))
                                         .on_hover_cursor(egui::CursorIcon::PointingHand)
                                         .on_hover_text("Right click to filter out");

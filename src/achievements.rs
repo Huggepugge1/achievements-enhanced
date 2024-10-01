@@ -135,7 +135,6 @@ impl AchievementPresention {
 #[derive(Clone, Debug)]
 pub struct Achievement {
     pub id: String,
-    pub link: String,
     pub title: String,
     pub deadline: Option<DateTime<Local>>,
     pub done: bool,
@@ -150,7 +149,6 @@ pub struct Achievement {
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct SerializableAchievement {
     pub id: String,
-    pub link: String,
     pub title: String,
     pub deadline: Option<String>,
     pub done: bool,
