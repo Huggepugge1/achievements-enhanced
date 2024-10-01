@@ -71,12 +71,55 @@ impl AchievementLanguage {
 
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, serde::Deserialize, serde::Serialize)]
 pub enum Sprint {
+    Lab,
     Sprint1,
     Sprint2,
     Sprint3,
     Sprint4,
     Project,
     Unclear,
+}
+
+impl Sprint {
+    pub fn to_date(&self) -> DateTime<Local> {
+        match self {
+            Sprint::Lab => {
+                DateTime::parse_from_str("2 Sep 2024 0:0:0 +0000", "%d %b %Y %H:%M:%S %z")
+                    .unwrap()
+                    .with_timezone(&Local)
+            }
+            Sprint::Sprint1 => {
+                DateTime::parse_from_str("16 Sep 2024 0:0:0 +0000", "%d %b %Y %H:%M:%S %z")
+                    .unwrap()
+                    .with_timezone(&Local)
+            }
+            Sprint::Sprint2 => {
+                DateTime::parse_from_str("7 Oct 2024 0:0:0 +0000", "%d %b %Y %H:%M:%S %z")
+                    .unwrap()
+                    .with_timezone(&Local)
+            }
+            Sprint::Sprint3 => {
+                DateTime::parse_from_str("4 Nov 2024 0:0:0 +0000", "%d %b %Y %H:%M:%S %z")
+                    .unwrap()
+                    .with_timezone(&Local)
+            }
+            Sprint::Sprint4 => {
+                DateTime::parse_from_str("25 Nov 2024 0:0:0 +0000", "%d %b %Y %H:%M:%S %z")
+                    .unwrap()
+                    .with_timezone(&Local)
+            }
+            Sprint::Project => {
+                DateTime::parse_from_str("2 Dec 2024 0:0:0 +0000", "%d %b %Y %H:%M:%S %z")
+                    .unwrap()
+                    .with_timezone(&Local)
+            }
+            Sprint::Unclear => {
+                DateTime::parse_from_str("2 Dec 2024 0:0:0 +0000", "%d %b %Y %H:%M:%S %z")
+                    .unwrap()
+                    .with_timezone(&Local)
+            }
+        }
+    }
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, serde::Deserialize, serde::Serialize)]

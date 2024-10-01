@@ -2,6 +2,8 @@ use crate::achievements::{
     Achievement, AchievementLanguage, AchievementPresention, PresentationType, ProgrammingLanguage,
     SerializableAchievement, Sprint,
 };
+use crate::default_values;
+
 use chrono::{DateTime, Local};
 
 use csv;
@@ -23,7 +25,7 @@ pub fn read_achievements_from_gui() -> Result<Vec<Achievement>, csv::Error> {
             } else {
                 Some(
                     DateTime::parse_from_str(
-                        &format!("{} 0:0:0 +0200", serialized_achievement.deadline.unwrap()),
+                        &format!("{} 0:0:0 +0000", serialized_achievement.deadline.unwrap()),
                         "%b %d, %Y %H:%M:%S %z",
                     )
                     .unwrap()
@@ -58,7 +60,7 @@ pub fn read_achievements_from_google_sheets() -> Result<Vec<Achievement>, csv::E
             "" => None,
             _ => Some(
                 DateTime::parse_from_str(
-                    &format!("{} 0:0:0 +0200", &result[3]),
+                    &format!("{} 0:0:0 +0000", &result[3]),
                     "%b %d, %Y %H:%M:%S %z",
                 )
                 .unwrap()
@@ -127,4 +129,61 @@ pub fn read_achievements_from_google_sheets() -> Result<Vec<Achievement>, csv::E
     }
 
     Ok(achievements)
+}
+
+pub fn read_defaults() -> Vec<Achievement> {
+    let mut achievements = Vec::new();
+
+    let ids = default_values::IDS;
+    let titles = default_values::TITLES;
+    let deadlines = default_values::DEADLINES;
+    let done = default_values::DONE;
+    let present_soon = default_values::PRESENT_SOON;
+    let grades = default_values::GRADES;
+    let presenting_types = default_values::PRESENTING_TYPES;
+    let programming_languages = default_values::PROGRAMMING_LANGUAGES;
+    let sprints = default_values::SPRINTS;
+    let comments = default_values::COMMENTS;
+
+    for i in 0..ids.len() {
+        achievements.push(Achievement {
+            id: ids[i].to_string(),
+            title: titles[i].to_string(),
+            deadline: if deadlines[i] == "" {
+                None
+            } else {
+                Some(
+                    DateTime::parse_from_str(
+                        &format!("{} 0:0:0 +0000", deadlines[i]),
+                        "%b %d, %Y %H:%M:%S %z",
+                    )
+                    .unwrap()
+                    .with_timezone(&Local),
+                )
+            },
+            done: done[i],
+            present_soon: present_soon[i],
+            grade: grades[i],
+            presenting_type: AchievementPresention::from_string(presenting_types[i].to_string()),
+            programming_language: AchievementLanguage::from_string(
+                programming_languages[i].to_string(),
+            ),
+            sprint: match sprints[i] {
+                "Sprint 1" => Sprint::Sprint1,
+                "Sprint 2" => Sprint::Sprint2,
+                "Sprint 3" => Sprint::Sprint3,
+                "Sprint 4" => Sprint::Sprint4,
+                "Project" => Sprint::Project,
+                "Projekt" => Sprint::Project,
+                "IDK" => Sprint::Unclear,
+                e => panic!("Unknown sprint {e}"),
+            },
+            comment: if comments[i] == "" {
+                None
+            } else {
+                Some(comments[i].to_string())
+            },
+        });
+    }
+    achievements
 }
