@@ -188,6 +188,10 @@ impl Application {
         for achievement in self.achievements.clone() {
             let serializable_achievement = achievements::SerializableAchievement {
                 id: achievement.id.clone(),
+                link: format!(
+                    "https://uppsala.instructure.com/courses/97453/pages/achievements#{}",
+                    achievement.id[1..].to_string()
+                ),
                 title: achievement.title.clone(),
                 deadline: achievement
                     .deadline

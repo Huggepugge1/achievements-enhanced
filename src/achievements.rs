@@ -149,6 +149,7 @@ pub struct Achievement {
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct SerializableAchievement {
     pub id: String,
+    pub link: String,
     pub title: String,
     pub deadline: Option<String>,
     pub done: bool,
