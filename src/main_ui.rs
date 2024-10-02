@@ -81,6 +81,13 @@ impl Application {
                     }
                 },
             );
+
+            let settings_button =
+                ui.button(egui::RichText::new("Settings").font(egui::FontId::new(
+                    self.settings.font_size * 1.5,
+                    egui::FontFamily::Proportional,
+                )));
+
             let achievements_button =
                 ui.button(egui::RichText::new("Achievements").font(egui::FontId::new(
                     self.settings.font_size * 1.5,
@@ -102,6 +109,8 @@ impl Application {
                 ui.memory_mut(|memory| {
                     memory.open_popup(edit_popup_id);
                 });
+            } else if settings_button.clicked() {
+                self.active_window = crate::application::ActiveWindow::Settings;
             } else if achievements_button.clicked() {
                 self.active_window = crate::application::ActiveWindow::Achievements;
             } else if progress_tracker_button.clicked() {

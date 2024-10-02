@@ -6,6 +6,7 @@ mod default_values;
 mod main_ui;
 mod progress_tracker;
 mod progress_tracker_ui;
+mod settings_ui;
 
 use eframe::NativeOptions;
 

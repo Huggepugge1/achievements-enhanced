@@ -9,8 +9,9 @@ use std::fmt::Display;
 use eframe::egui;
 
 pub struct Settings {
-    pub line_height: f32,
     pub font_size: f32,
+    pub show_passed_labs: bool,
+    pub dark_mode: bool,
 }
 
 #[derive(Debug)]
@@ -125,32 +126,60 @@ impl Sort {
     }
 }
 
+#[derive(PartialEq)]
+pub enum FilterType {
+    Remove,
+    Include,
+}
+
+pub struct Filter<T> {
+    pub typ: FilterType,
+    pub value: Vec<T>,
+}
+
+impl<T: std::cmp::PartialEq> Filter<T> {
+    pub fn new() -> Self {
+        Self {
+            typ: FilterType::Remove,
+            value: Vec::new(),
+        }
+    }
+
+    pub fn push(&mut self, value: T) {
+        self.value.push(value);
+    }
+
+    pub fn contains(&self, value: &T) -> bool {
+        self.value.contains(value)
+    }
+}
+
 pub struct Filters {
-    pub id: Vec<String>,
-    pub title: Vec<String>,
-    pub deadline: Vec<Option<chrono::DateTime<chrono::Local>>>,
-    pub done: Vec<bool>,
-    pub present_soon: Vec<bool>,
-    pub grade: Vec<i8>,
-    pub presenting_type: Vec<AchievementPresention>,
-    pub programming_language: Vec<AchievementLanguage>,
-    pub sprint: Vec<Sprint>,
-    pub comment: Vec<Option<String>>,
+    pub id: Filter<String>,
+    pub title: Filter<String>,
+    pub deadline: Filter<Option<chrono::DateTime<chrono::Local>>>,
+    pub done: Filter<bool>,
+    pub present_soon: Filter<bool>,
+    pub grade: Filter<i8>,
+    pub presenting_type: Filter<AchievementPresention>,
+    pub programming_language: Filter<AchievementLanguage>,
+    pub sprint: Filter<Sprint>,
+    pub comment: Filter<Option<String>>,
 }
 
 impl Filters {
     pub fn new() -> Self {
         Self {
-            id: Vec::new(),
-            title: Vec::new(),
-            deadline: Vec::new(),
-            done: Vec::new(),
-            present_soon: Vec::new(),
-            grade: Vec::new(),
-            presenting_type: Vec::new(),
-            programming_language: Vec::new(),
-            sprint: Vec::new(),
-            comment: Vec::new(),
+            id: Filter::new(),
+            title: Filter::new(),
+            deadline: Filter::new(),
+            done: Filter::new(),
+            present_soon: Filter::new(),
+            grade: Filter::new(),
+            presenting_type: Filter::new(),
+            programming_language: Filter::new(),
+            sprint: Filter::new(),
+            comment: Filter::new(),
         }
     }
 }
@@ -158,6 +187,7 @@ impl Filters {
 pub enum ActiveWindow {
     Achievements,
     ProgressTracker,
+    Settings,
 }
 
 pub struct Application {
@@ -183,8 +213,9 @@ impl Application {
 
         Self {
             settings: Settings {
-                line_height: 35.0,
                 font_size: 14.0,
+                show_passed_labs: false,
+                dark_mode: true,
             },
             achievements,
             progress_tracker,
@@ -320,21 +351,48 @@ impl Application {
             .clone()
             .into_iter()
             .enumerate()
-            .filter(|(_, x)| !self.filters.id.contains(&x.id))
-            .filter(|(_, x)| !self.filters.title.contains(&x.title))
-            .filter(|(_, x)| !self.filters.deadline.contains(&x.deadline))
-            .filter(|(_, x)| !self.filters.done.contains(&x.done))
-            .filter(|(_, x)| !self.filters.present_soon.contains(&x.present_soon))
-            .filter(|(_, x)| !self.filters.grade.contains(&x.grade))
-            .filter(|(_, x)| !self.filters.presenting_type.contains(&x.presenting_type))
             .filter(|(_, x)| {
-                !self
-                    .filters
-                    .programming_language
-                    .contains(&x.programming_language)
+                (self.filters.id.typ == FilterType::Include) == self.filters.id.contains(&x.id)
             })
-            .filter(|(_, x)| !self.filters.sprint.contains(&x.sprint))
-            .filter(|(_, x)| !self.filters.comment.contains(&x.comment))
+            .filter(|(_, x)| {
+                (self.filters.title.typ == FilterType::Include)
+                    == self.filters.title.contains(&x.title)
+            })
+            .filter(|(_, x)| {
+                (self.filters.deadline.typ == FilterType::Include)
+                    == self.filters.deadline.contains(&x.deadline)
+            })
+            .filter(|(_, x)| {
+                (self.filters.done.typ == FilterType::Include)
+                    == self.filters.done.contains(&x.done)
+            })
+            .filter(|(_, x)| {
+                (self.filters.present_soon.typ == FilterType::Include)
+                    == self.filters.present_soon.contains(&x.present_soon)
+            })
+            .filter(|(_, x)| {
+                (self.filters.grade.typ == FilterType::Include)
+                    == self.filters.grade.contains(&x.grade)
+            })
+            .filter(|(_, x)| {
+                (self.filters.presenting_type.typ == FilterType::Include)
+                    == self.filters.presenting_type.contains(&x.presenting_type)
+            })
+            .filter(|(_, x)| {
+                (self.filters.programming_language.typ == FilterType::Include)
+                    == self
+                        .filters
+                        .programming_language
+                        .contains(&x.programming_language)
+            })
+            .filter(|(_, x)| {
+                (self.filters.sprint.typ == FilterType::Include)
+                    == self.filters.sprint.contains(&x.sprint)
+            })
+            .filter(|(_, x)| {
+                (self.filters.comment.typ == FilterType::Include)
+                    == self.filters.comment.contains(&x.comment)
+            })
             .collect::<Vec<(usize, Achievement)>>();
 
         filtered_achievements
@@ -349,19 +407,54 @@ impl eframe::App for Application {
     }
 
     fn update(&mut self, ctx: &eframe::egui::Context, _frame: &mut eframe::Frame) {
-        if ctx.input(|i| i.key_pressed(egui::Key::Q) && i.modifiers.ctrl) {
-            ctx.send_viewport_cmd(egui::ViewportCommand::Close)
+        let mut close = false;
+        ctx.input(|i| {
+            if i.modifiers.ctrl {
+                if i.key_pressed(egui::Key::Q) {
+                    close = true;
+                } else if i.key_pressed(egui::Key::S) {
+                    if let Err(e) = self.save_achievements() {
+                        eprintln!("Error saving achievements: {}", e);
+                    };
+                } else if i.key_pressed(egui::Key::A) {
+                    self.active_window = ActiveWindow::Achievements;
+                } else if i.key_pressed(egui::Key::P) {
+                    self.active_window = ActiveWindow::ProgressTracker;
+                } else if i.key_pressed(egui::Key::F)
+                    || i.pointer.button_clicked(egui::PointerButton::Middle)
+                {
+                    self.filters = Filters::new();
+                } else if i.key_pressed(egui::Key::D) {
+                    self.clear_done();
+                } else if i.key_pressed(egui::Key::L) {
+                    self.clear_present_soon();
+                } else if i.key_pressed(egui::Key::Comma) {
+                    self.active_window = ActiveWindow::Settings;
+                }
+            }
+        });
+
+        if close {
+            ctx.send_viewport_cmd(egui::ViewportCommand::Close);
         }
 
-        if ctx.input(|i| i.key_pressed(egui::Key::S) && i.modifiers.ctrl) {
-            if let Err(e) = self.save_achievements() {
-                eprintln!("Error saving achievements: {}", e);
-            };
+        ctx.style_mut(|ctx| {
+            ctx.override_font_id = Some(egui::FontId::new(
+                self.settings.font_size,
+                egui::FontFamily::Proportional,
+            ));
+            ctx.wrap_mode = Some(egui::TextWrapMode::Extend);
+        });
+
+        match self.settings.dark_mode {
+            true => ctx.set_visuals(egui::Visuals::dark()),
+            false => ctx.set_visuals(egui::Visuals::light()),
         }
 
         match self.active_window {
             ActiveWindow::Achievements => self.achievements_ui(ctx),
             ActiveWindow::ProgressTracker => self.progress_tracker_ui(ctx),
+            ActiveWindow::Settings => self.settings_ui(ctx),
         }
     }
 }

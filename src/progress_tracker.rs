@@ -41,9 +41,10 @@ const LABS: [&str; 32] = [
 pub struct Lab {
     pub date: DateTime<Local>,
     pub done: bool,
-    pub perfect_student: u8,
-    pub target_student: u8,
-    pub minimum_student: u8,
+    pub optimal: u8,
+    pub minimum: u8,
+    pub target: u8,
+    pub current_minimum: u8,
 }
 
 impl Lab {
@@ -58,9 +59,10 @@ impl Lab {
         let lab = Lab {
             date,
             done,
-            perfect_student: 0,
-            target_student: 0,
-            minimum_student: 0,
+            optimal: 0,
+            minimum: 0,
+            target: 0,
+            current_minimum: 0,
         };
 
         lab
@@ -87,9 +89,10 @@ pub struct ProgressTracker {
     pub labs: Vec<Lab>,
     pub max_per_lab: u8,
     pub target_grade: i8,
-    pub perfect_student: u8,
-    pub target_student: u8,
-    pub minimum_student: u8,
+    pub optimal: u8,
+    pub minimum: u8,
+    pub target: u8,
+    pub current_minimum: u8,
 }
 
 impl ProgressTracker {
@@ -105,9 +108,10 @@ impl ProgressTracker {
             labs,
             max_per_lab,
             target_grade,
-            perfect_student: 0,
-            target_student: 0,
-            minimum_student: 0,
+            optimal: 0,
+            minimum: 0,
+            target: 0,
+            current_minimum: 0,
         };
 
         progress_tracker.update();
@@ -125,10 +129,14 @@ impl ProgressTracker {
             .collect::<Vec<&Achievement>>()
             .len() as u8;
 
-        self.perfect_student = match self.mode {
+        self.optimal = match self.mode {
             ProgressTrackerMode::Left => max_achievements,
             ProgressTrackerMode::Done => 0,
         };
+
+        self.minimum = self.optimal;
+        self.target = self.optimal;
+        self.current_minimum = self.optimal;
 
         for (i, lab) in self.labs.clone().into_iter().enumerate() {
             let filtered_achievements = self
@@ -140,25 +148,120 @@ impl ProgressTracker {
                 })
                 .filter(|achievement| achievement.sprint.to_date() <= lab.date)
                 .filter(|achievement| achievement.grade <= self.target_grade)
-                .collect::<Vec<&Achievement>>();
+                .collect::<Vec<&Achievement>>()
+                .len() as u8;
+
+            let achievements_left = self
+                .achievements
+                .iter()
+                .filter(|achievement| {
+                    achievement.presenting_type
+                        == AchievementPresention::Single(PresentationType::Lab)
+                })
+                .filter(|achievement| achievement.sprint.to_date() <= lab.date)
+                .filter(|achievement| achievement.grade <= self.target_grade)
+                .filter(|achievement| !achievement.done)
+                .collect::<Vec<&Achievement>>()
+                .len() as u8;
 
             match self.mode {
                 ProgressTrackerMode::Left => {
-                    self.perfect_student -= u8::min(
+                    self.optimal -= u8::min(
                         self.max_per_lab,
-                        filtered_achievements.len() as u8
-                            - (max_achievements - self.perfect_student),
+                        filtered_achievements - (max_achievements - self.optimal),
                     );
+                    self.minimum -= u8::min(
+                        self.max_per_lab,
+                        u8::min(
+                            filtered_achievements - (max_achievements - self.minimum),
+                            u8::div_ceil(
+                                max_achievements - (max_achievements - self.minimum),
+                                (self.labs.len() - i) as u8,
+                            ),
+                        ),
+                    );
+                    if Local::now() > lab.date {
+                        self.target -= u8::min(
+                            4,
+                            u8::min(
+                                filtered_achievements - (max_achievements - self.target),
+                                (filtered_achievements - achievements_left)
+                                    - (max_achievements - self.target),
+                            ),
+                        );
+                        self.current_minimum -= u8::min(
+                            4,
+                            u8::min(
+                                filtered_achievements - (max_achievements - self.current_minimum),
+                                (filtered_achievements - achievements_left)
+                                    - (max_achievements - self.current_minimum),
+                            ),
+                        );
+                    } else {
+                        self.target -= u8::min(
+                            self.max_per_lab,
+                            filtered_achievements - (max_achievements - self.target),
+                        );
+                        self.current_minimum -= u8::min(
+                            self.max_per_lab,
+                            u8::min(
+                                filtered_achievements - (max_achievements - self.current_minimum),
+                                u8::div_ceil(
+                                    max_achievements - (max_achievements - self.current_minimum),
+                                    (self.labs.len() - i) as u8,
+                                ),
+                            ),
+                        );
+                    }
                 }
                 ProgressTrackerMode::Done => {
-                    self.perfect_student += u8::min(
+                    self.optimal += u8::min(self.max_per_lab, filtered_achievements - self.optimal);
+                    self.minimum += u8::min(
                         self.max_per_lab,
-                        filtered_achievements.len() as u8 - self.perfect_student,
+                        u8::min(
+                            filtered_achievements - self.minimum,
+                            u8::div_ceil(
+                                max_achievements - self.minimum,
+                                (self.labs.len() - i) as u8,
+                            ),
+                        ),
                     );
+                    if Local::now() > lab.date {
+                        self.target += u8::min(
+                            4,
+                            u8::min(
+                                filtered_achievements - self.target,
+                                (filtered_achievements - achievements_left) - self.target,
+                            ),
+                        );
+                        self.current_minimum += u8::min(
+                            4,
+                            u8::min(
+                                filtered_achievements - self.current_minimum,
+                                (filtered_achievements - achievements_left) - self.current_minimum,
+                            ),
+                        );
+                    } else {
+                        self.target +=
+                            u8::min(self.max_per_lab, filtered_achievements - self.target);
+                        self.current_minimum += u8::min(
+                            self.max_per_lab,
+                            u8::min(
+                                filtered_achievements - self.current_minimum,
+                                u8::div_ceil(
+                                    max_achievements - self.current_minimum,
+                                    (self.labs.len() - i) as u8,
+                                ),
+                            ),
+                        );
+                    }
                 }
             }
 
-            self.labs[i].perfect_student = self.perfect_student;
+            self.labs[i].optimal = self.optimal;
+            self.labs[i].minimum = self.minimum;
+            self.labs[i].target = self.target;
+            self.labs[i].current_minimum = self.current_minimum;
         }
     }
 }
