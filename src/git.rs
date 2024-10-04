@@ -8,7 +8,7 @@ pub fn git_pull() {
 
     let output = if cfg!(target_os = "windows") {
         Command::new("cmd")
-            .args(&["/C", "git pull"])
+            .args(&["/C", "git", "pull"])
             .output()
             .expect("failed to execute process")
     } else {
@@ -32,7 +32,7 @@ pub fn git_add() {
 
     let output = if cfg!(target_os = "windows") {
         Command::new("cmd")
-            .args(&["/C", "git add ."])
+            .args(&["/C", "git", "add", "."])
             .output()
             .expect("failed to execute process")
     } else {
@@ -83,7 +83,7 @@ pub fn git_push() {
 
     let output = if cfg!(target_os = "windows") {
         Command::new("cmd")
-            .args(&["/C", "git push"])
+            .args(&["/C", "git", "push"])
             .output()
             .expect("failed to execute process")
     } else {
