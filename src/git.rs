@@ -29,6 +29,7 @@ pub fn git_add() {
     println!("Adding changes to git");
 
     println!("command: git add .");
+    println!("{:?}", Command::new("cmd").args(&["/C", "git", "add", "."]));
 
     let output = if cfg!(target_os = "windows") {
         Command::new("cmd")
