@@ -291,11 +291,6 @@ impl Application {
             };
             wtr.serialize(serializable_achievement)?;
         }
-        if self.settings.git {
-            git::git_add();
-            git::git_commit();
-            git::git_push();
-        }
         Ok(())
     }
 
@@ -461,6 +456,11 @@ impl eframe::App for Application {
         if let Err(e) = self.save_achievements() {
             eprintln!("Error saving achievements: {}", e);
         };
+        if self.settings.git {
+            git::git_add();
+            git::git_commit();
+            git::git_push();
+        }
     }
 
     fn update(&mut self, ctx: &eframe::egui::Context, _frame: &mut eframe::Frame) {
