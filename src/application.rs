@@ -238,6 +238,11 @@ pub struct Application {
 
 impl Application {
     pub fn new(_cc: &CreationContext) -> Self {
+        let settings = Settings::new();
+        if settings.git {
+            git::git_pull();
+        }
+
         let achievements = match achievement_csv::read_achievements_from_gui() {
             Ok(achievements) => achievements,
             Err(_) => match achievement_csv::read_achievements_from_google_sheets() {
@@ -247,12 +252,7 @@ impl Application {
         };
 
         let progress_tracker = ProgressTracker::new(4, 5, &achievements);
-        let settings = Settings::new();
         let language = settings.language;
-
-        if settings.git {
-            git::git_pull();
-        }
 
         Self {
             settings,
@@ -290,6 +290,12 @@ impl Application {
                 comment: achievement.comment.clone(),
             };
             wtr.serialize(serializable_achievement)?;
+
+            if self.settings.git {
+                git::git_add();
+                git::git_commit();
+                git::git_push();
+            }
         }
         Ok(())
     }
@@ -456,12 +462,6 @@ impl eframe::App for Application {
         if let Err(e) = self.save_achievements() {
             eprintln!("Error saving achievements: {}", e);
         };
-
-        if self.settings.git {
-            git::git_add();
-            git::git_commit();
-            git::git_push();
-        }
     }
 
     fn update(&mut self, ctx: &eframe::egui::Context, _frame: &mut eframe::Frame) {
