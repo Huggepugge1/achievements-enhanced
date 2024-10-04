@@ -234,10 +234,10 @@ pub const PRESENTING_TYPES: [&str; 65] = [
 
 pub const PROGRAMMING_LANGUAGES: [&str; 65] = [
     "C", "Java", "C", "C", "Java", "Java", "Java", "C", "C", "C", "Java", "Java", "C", "C", "C",
-    "Java", "Java", "Java", "Java", "C&Java", "Java", "Java", "C", "Java", "C", "C", "C&Java",
-    "Java", "Java", "C", "C", "C", "C", "C", "C", "C&Java", "C&Java", "C/Java", "C/Java", "C/Java",
-    "C", "C", "C", "C", "C", "C", "C/Java", "Git", "C", "Terminal", "Essä", "Möte", "C/Java",
-    "Essä", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C",
+    "Java", "Java", "Java", "Java", "C & Java", "Java", "Java", "C", "Java", "C", "C", "C & Java",
+    "Java", "Java", "C", "C", "C", "C", "C", "C", "C & Java", "C & Java", "C / Java", "C / Java",
+    "C / Java", "C", "C", "C", "C", "C", "C", "C / Java", "Git", "C", "Terminal", "Essä", "Möte",
+    "C / Java", "Essä", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C",
 ];
 
 pub const SPRINTS: [&str; 65] = [
