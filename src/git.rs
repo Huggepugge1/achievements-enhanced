@@ -59,7 +59,7 @@ pub fn git_commit() {
 
     let output = if cfg!(target_os = "windows") {
         Command::new("cmd")
-            .args(&["/C", &command])
+            .args(&["/C", "git", "commit", "-m", &message])
             .output()
             .expect("failed to execute process")
     } else {
