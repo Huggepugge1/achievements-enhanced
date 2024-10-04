@@ -4,6 +4,8 @@ use std::process::Command;
 pub fn git_pull() {
     println!("Pulling changes from git");
 
+    println!("command: git pull");
+
     let output = if cfg!(target_os = "windows") {
         Command::new("cmd")
             .args(&["/C", "git pull"])
@@ -25,6 +27,8 @@ pub fn git_pull() {
 
 pub fn git_add() {
     println!("Adding changes to git");
+
+    println!("command: git add .");
 
     let output = if cfg!(target_os = "windows") {
         Command::new("cmd")
@@ -51,6 +55,8 @@ pub fn git_commit() {
     let message = Local::now().format("%Y-%m-%d %H:%M:%S").to_string();
     let command = format!("git commit -m \"{}\"", message);
 
+    println!("command: {}", command);
+
     let output = if cfg!(target_os = "windows") {
         Command::new("cmd")
             .args(&["/C", &command])
@@ -72,6 +78,8 @@ pub fn git_commit() {
 
 pub fn git_push() {
     println!("Pushing changes to git");
+
+    println!("command: git push");
 
     let output = if cfg!(target_os = "windows") {
         Command::new("cmd")
