@@ -2,6 +2,8 @@ import requests
 import sys
 import os
 
+print("Checking for updates")
+
 # Repository details
 owner = "Huggepugge1"
 repo = "achievements-enhanced"
@@ -11,7 +13,6 @@ release_url = f"https://api.github.com/repos/{owner}/{repo}/releases/latest"
 
 # Send GET request for the latest release
 response = requests.get(release_url)
-print(response.json())
 tag_name = response.json()["tag_name"]
 
 # Check if the latest release is newer than the current version
@@ -22,7 +23,6 @@ if tag_name != sys.argv[1]:
     if choice == "y":
         # Download the latest release
         download_url = response.json()
-        print(download_url["assets"])
         for asset in download_url["assets"]:
             if os.name == "nt":
                 if asset["name"] == "achievements_enhanced.exe":
