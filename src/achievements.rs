@@ -40,8 +40,8 @@ impl std::fmt::Display for AchievementLanguage {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         match self {
             AchievementLanguage::Single(lang) => write!(f, "{}", lang),
-            AchievementLanguage::Both { first, second } => write!(f, "{}&{}", first, second),
-            AchievementLanguage::Either { first, second } => write!(f, "{}/{}", first, second),
+            AchievementLanguage::Both { first, second } => write!(f, "{} & {}", first, second),
+            AchievementLanguage::Either { first, second } => write!(f, "{} / {}", first, second),
         }
     }
 }
@@ -55,11 +55,11 @@ impl AchievementLanguage {
             "Git" => AchievementLanguage::Single(ProgrammingLanguage::Git),
             "Essä" => AchievementLanguage::Single(ProgrammingLanguage::NoLanguage),
             "Möte" => AchievementLanguage::Single(ProgrammingLanguage::NoLanguage),
-            "C&Java" => AchievementLanguage::Both {
+            "C & Java" => AchievementLanguage::Both {
                 first: ProgrammingLanguage::C,
                 second: ProgrammingLanguage::Java,
             },
-            "C/Java" => AchievementLanguage::Either {
+            "C / Java" => AchievementLanguage::Either {
                 first: ProgrammingLanguage::C,
                 second: ProgrammingLanguage::Java,
             },

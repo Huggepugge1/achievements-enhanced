@@ -20,13 +20,13 @@ impl Application {
                         .num_columns(7)
                         .striped(true)
                         .show(ui, |ui| {
-                            let lab = ui
-                                .heading("Lab")
+                            let lab = self
+                                .heading(ui, self.language.lab.clone())
                                 .on_hover_cursor(egui::CursorIcon::PointingHand)
                                 .on_hover_ui(|ui| {
                                     ui.label(match self.settings.show_passed_labs {
-                                        true => "Click to hide passed labs",
-                                        false => "Click to show passed labs",
+                                        false => self.language.click_to_show_passed_labs.clone(),
+                                        true => self.language.click_to_hide_passed_labs.clone(),
                                     });
                                 });
 
@@ -34,17 +34,17 @@ impl Application {
                                 self.settings.show_passed_labs = !self.settings.show_passed_labs;
                             }
 
-                            ui.heading("Date");
-                            let optimal = ui
-                                .heading("Optimal")
+                            ui.heading(self.language.date.clone());
+                            let optimal = self
+                                .heading(ui, self.language.optimal.clone())
                                 .on_hover_cursor(egui::CursorIcon::PointingHand)
                                 .on_hover_ui(|ui| {
                                     ui.label(match self.progress_tracker.mode {
                                         progress_tracker::ProgressTrackerMode::Left => {
-                                            "Click to show achievements done"
+                                            self.language.click_to_show_achievements_done.clone()
                                         }
                                         progress_tracker::ProgressTrackerMode::Done => {
-                                            "Click to show achievements left"
+                                            self.language.click_to_show_achievements_left.clone()
                                         }
                                     });
                                 });
@@ -54,16 +54,16 @@ impl Application {
                                 self.progress_tracker.update();
                             }
 
-                            let minimum = ui
-                                .heading("Minimum")
+                            let minimum = self
+                                .heading(ui, self.language.minimum.clone())
                                 .on_hover_cursor(egui::CursorIcon::PointingHand)
                                 .on_hover_ui(|ui| {
                                     ui.label(match self.progress_tracker.mode {
                                         progress_tracker::ProgressTrackerMode::Left => {
-                                            "Click to show achievements done"
+                                            self.language.click_to_show_achievements_done.clone()
                                         }
                                         progress_tracker::ProgressTrackerMode::Done => {
-                                            "Click to show achievements left"
+                                            self.language.click_to_show_achievements_left.clone()
                                         }
                                     });
                                 });
@@ -73,16 +73,16 @@ impl Application {
                                 self.progress_tracker.update();
                             }
 
-                            let target = ui
-                                .heading("Target")
+                            let target = self
+                                .heading(ui, self.language.target.clone())
                                 .on_hover_cursor(egui::CursorIcon::PointingHand)
                                 .on_hover_ui(|ui| {
                                     ui.label(match self.progress_tracker.mode {
                                         progress_tracker::ProgressTrackerMode::Left => {
-                                            "Click to show achievements done"
+                                            self.language.click_to_show_achievements_done.clone()
                                         }
                                         progress_tracker::ProgressTrackerMode::Done => {
-                                            "Click to show achievements left"
+                                            self.language.click_to_show_achievements_left.clone()
                                         }
                                     });
                                 });
@@ -92,16 +92,16 @@ impl Application {
                                 self.progress_tracker.update();
                             }
 
-                            let current_minimum = ui
-                                .heading("Minimum to reach target grade")
+                            let current_minimum = self
+                                .heading(ui, self.language.minimum_to_reach_target_grade.clone())
                                 .on_hover_cursor(egui::CursorIcon::PointingHand)
                                 .on_hover_ui(|ui| {
                                     ui.label(match self.progress_tracker.mode {
                                         progress_tracker::ProgressTrackerMode::Left => {
-                                            "Click to show achievements done"
+                                            self.language.click_to_show_achievements_done.clone()
                                         }
                                         progress_tracker::ProgressTrackerMode::Done => {
-                                            "Click to show achievements left"
+                                            self.language.click_to_show_achievements_left.clone()
                                         }
                                     });
                                 });
@@ -117,7 +117,7 @@ impl Application {
                                 self.progress_tracker.labs.clone().into_iter().enumerate()
                             {
                                 if Local::now() <= lab.date || self.settings.show_passed_labs {
-                                    ui.label(format!("Lab {}", i + 1));
+                                    ui.label(format!("{} {}", self.language.lab, i + 1));
                                     ui.label(lab.date.format("%a %b %d, %Y").to_string());
                                     ui.label(lab.optimal.to_string());
                                     ui.label(lab.minimum.to_string());

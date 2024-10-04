@@ -10,6 +10,8 @@ impl Application {
             .map(|(_, achievement)| achievement)
             .collect::<Vec<Achievement>>();
 
+        let settings = self.settings.clone();
+
         egui::CentralPanel::default().show(ctx, |ui| {
             self.menu_bar(ctx, ui);
 
@@ -18,22 +20,28 @@ impl Application {
                 .show(ui, |ui| {
                 egui::Grid::new("Achievements Grid")
                     .spacing(egui::vec2(
-                        self.settings.font_size * 5.0,
+                        self.settings.font_size * 2.0,
                         self.settings.font_size * 2.0,
                     ))
-                    .num_columns(11)
+                    .num_columns(12)
                     .with_row_color(move |row_index, style| {
                         if row_index > 0
                             && row_index < achievements.len() + 1
                             && achievements[row_index - 1].done
                         {
-                            let green = egui::Color32::from_rgba_unmultiplied(0, 255, 0, 50);
+                            let green = match settings.dark_mode {
+                                true => egui::Color32::from_rgba_unmultiplied(0, 255, 0, 25),
+                                false => egui::Color32::from_rgba_unmultiplied(0, 255, 0, 100),
+                            };
                             Some(green)
                         } else if row_index > 0
                             && row_index < achievements.len() + 1
                             && achievements[row_index - 1].present_soon
                         {
-                            let yellow = egui::Color32::from_rgba_unmultiplied(255, 255, 0, 25);
+                            let yellow = match settings.dark_mode {
+                                true => egui::Color32::from_rgba_unmultiplied(255, 255, 0, 25),
+                                false => egui::Color32::from_rgba_unmultiplied(255, 255, 0, 100),
+                            };
                             Some(yellow)
                         } else if row_index % 2 == 1 {
                             Some(style.visuals.faint_bg_color)
@@ -42,35 +50,35 @@ impl Application {
                         }
                     })
                     .show(ui, |ui| {
-                        let id = ui.heading("ID").on_hover_cursor(egui::CursorIcon::PointingHand).on_hover_ui(|ui| {
-                            ui.label(format!("Click to sort {}", self.sorting.id.reverse()));
+                        let id = self.heading(ui, self.language.id.clone()).on_hover_cursor(egui::CursorIcon::PointingHand).on_hover_ui(|ui| {
+                            ui.label(format!("{} {}", self.language.click_to_sort, self.sorting.id.reverse()));
                         });
-                        let title = ui.heading("Title").on_hover_cursor(egui::CursorIcon::PointingHand).on_hover_ui(|ui| {
-                            ui.label(format!("Click to sort {}", self.sorting.title.reverse()));
+                        let title = self.heading(ui, self.language.title.clone()).on_hover_cursor(egui::CursorIcon::PointingHand).on_hover_ui(|ui| {
+                            ui.label(format!("{} {}", self.language.click_to_sort, self.sorting.title.reverse()));
                         });
-                        let deadline = ui.heading("Deadline").on_hover_cursor(egui::CursorIcon::PointingHand).on_hover_ui(|ui| {
-                            ui.label(format!("Click to sort {}", self.sorting.deadline.reverse()));
+                        let deadline = self.heading(ui, self.language.deadline.clone()).on_hover_cursor(egui::CursorIcon::PointingHand).on_hover_ui(|ui| {
+                            ui.label(format!("{} {}", self.language.click_to_sort, self.sorting.deadline.reverse()));
                         });
-                        let done = ui.heading("Done").on_hover_cursor(egui::CursorIcon::PointingHand).on_hover_ui(|ui| {
-                            ui.label(format!("Click to sort {}", self.sorting.done.reverse()));
+                        let done = self.heading(ui, self.language.done.clone()).on_hover_cursor(egui::CursorIcon::PointingHand).on_hover_ui(|ui| {
+                            ui.label(format!("{} {}", self.language.click_to_sort, self.sorting.done.reverse()));
                         });
-                        let present_soon = ui.heading("Present Soon").on_hover_cursor(egui::CursorIcon::PointingHand).on_hover_ui(|ui| {
-                            ui.label(format!("Click to sort {}", self.sorting.present_soon.reverse()));
+                        let present_soon = self.heading(ui, self.language.present_soon.clone()).on_hover_cursor(egui::CursorIcon::PointingHand).on_hover_ui(|ui| {
+                            ui.label(format!("{} {}", self.language.click_to_sort, self.sorting.present_soon.reverse()));
                         });
-                        let grade = ui.heading("Grade").on_hover_cursor(egui::CursorIcon::PointingHand).on_hover_ui(|ui| {
-                            ui.label(format!("Click to sort {}", self.sorting.grade.reverse()));
+                        let grade = self.heading(ui, self.language.grade.clone()).on_hover_cursor(egui::CursorIcon::PointingHand).on_hover_ui(|ui| {
+                            ui.label(format!("{} {}", self.language.click_to_sort, self.sorting.grade.reverse()));
                         });
-                        let presenting_type = ui.heading("Presenting Type").on_hover_cursor(egui::CursorIcon::PointingHand).on_hover_ui(|ui| {
-                            ui.label(format!("Click to sort {}", self.sorting.presenting_type.reverse()));
+                        let presenting_type = self.heading(ui, self.language.presenting_type.clone()).on_hover_cursor(egui::CursorIcon::PointingHand).on_hover_ui(|ui| {
+                            ui.label(format!("{} {}", self.language.click_to_sort, self.sorting.presenting_type.reverse()));
                         });
-                        let programming_language = ui.heading("Programming Language").on_hover_cursor(egui::CursorIcon::PointingHand).on_hover_ui(|ui| {
-                            ui.label(format!("Click to sort {}", self.sorting.programming_language.reverse()));
+                        let programming_language = self.heading(ui, self.language.programming_language.clone()).on_hover_cursor(egui::CursorIcon::PointingHand).on_hover_ui(|ui| {
+                            ui.label(format!("{} {}", self.language.click_to_sort, self.sorting.programming_language.reverse()));
                         });
-                        let sprint = ui.heading("Sprint").on_hover_cursor(egui::CursorIcon::PointingHand).on_hover_ui(|ui| {
-                            ui.label(format!("Click to sort {}", self.sorting.sprint.reverse()));
+                        let sprint = self.heading(ui, self.language.sprint.clone()).on_hover_cursor(egui::CursorIcon::PointingHand).on_hover_ui(|ui| {
+                            ui.label(format!("{} {}", self.language.click_to_sort, self.sorting.sprint.reverse()));
                         });
-                        let comment = ui.heading("Comment").on_hover_cursor(egui::CursorIcon::PointingHand).on_hover_ui(|ui| {
-                            ui.label(format!("Click to sort {}", self.sorting.comment.reverse()));
+                        let comment = self.heading(ui, self.language.comment.clone()).on_hover_cursor(egui::CursorIcon::PointingHand).on_hover_ui(|ui| {
+                            ui.label(format!("{} {}", self.language.click_to_sort, self.sorting.comment.reverse()));
                         });
                         if id.clicked_by(egui::PointerButton::Primary) {
                             self.sort_achievements(Fieled::ID);
@@ -110,7 +118,7 @@ impl Application {
                                 format!("https://uppsala.instructure.com/courses/97453/pages/achievements#{}", achievement.id[1..].to_string()),
                             ))
                                 .on_hover_cursor(egui::CursorIcon::PointingHand)
-                                .on_hover_text("Right click to filter out\nShift Right click to only show this");
+                                .on_hover_text(self.language.right_click_to_filter.clone());
 
                             let title = ui.add(egui::Hyperlink::from_label_and_url(
                                 egui::RichText::new(format!("{}", achievement.title))
@@ -122,7 +130,7 @@ impl Application {
                                 format!("https://uppsala.instructure.com/courses/97453/pages/achievements#{}", achievement.id[1..].to_string()),
                             ))
                                 .on_hover_cursor(egui::CursorIcon::PointingHand)
-                                .on_hover_text("Right click to filter out\nShift Right click to only show this");
+                                .on_hover_text(self.language.right_click_to_filter.clone());
 
                             let deadline = match achievement.deadline {
                                 Some(deadline) => {
@@ -133,54 +141,47 @@ impl Application {
                                 }
                             }
                                 .on_hover_cursor(egui::CursorIcon::PointingHand)
-                                .on_hover_text("Right click to filter out\nShift Right click to only show this");
+                                .on_hover_text(self.language.right_click_to_filter.clone());
 
                             let done = ui.centered_and_justified(|ui| {
                                 ui.checkbox(&mut self.achievements[i].done, "")
                                     .on_hover_cursor(egui::CursorIcon::PointingHand)
-                                    .on_hover_text("Right click to filter out\nShift Right click to only show this")
+                                    .on_hover_text(self.language.right_click_to_filter.clone())
                             });
                             let present_soon = ui.centered_and_justified(|ui| {
                                 ui.checkbox(&mut self.achievements[i].present_soon, "")
                                     .on_hover_cursor(egui::CursorIcon::PointingHand)
-                                    .on_hover_text("Right click to filter out\nShift Right click to only show this")
+                                    .on_hover_text(self.language.right_click_to_filter.clone())
                             });
                             let grade = ui.label(achievement.grade.to_string())
                                 .on_hover_cursor(egui::CursorIcon::PointingHand)
-                                .on_hover_text("Right click to filter out\nShift Right click to only show this");
+                                .on_hover_text(self.language.right_click_to_filter.clone());
 
-                            let presenting_type = match &achievement.presenting_type {
-                                AchievementPresention::Single(presenting_type) => {
-                                    ui.label(format!("{:?}", presenting_type))
-                                },
-                                AchievementPresention::Either { first, second } => {
-                                    ui.label(format!("{:?} OR {:?}", first, second))
-                                },
-                            }
+                            let presenting_type = ui.label(achievement.presenting_type.to_string())
                                 .on_hover_cursor(egui::CursorIcon::PointingHand)
-                                .on_hover_text("Right click to filter out\nShift Right click to only show this");
+                                .on_hover_text(self.language.right_click_to_filter.clone());
 
                             let programming_language = match &achievement.programming_language {
                                 AchievementLanguage::Single(programming_language) => {
                                     if programming_language == &ProgrammingLanguage::NoLanguage {
-                                        ui.label("No Specific Language")
+                                        ui.label(self.language.no_specific_language.clone())
                                     } else {
                                         ui.label(format!("{:?}", programming_language))
                                     }
                                 },
                                 AchievementLanguage::Both { first, second } => {
-                                    ui.label(format!("{:?} AND {:?}", first, second))
+                                    ui.label(format!("{:?} & {:?}", first, second))
                                 },
                                 AchievementLanguage::Either { first, second } => {
-                                    ui.label(format!("{:?} OR {:?}", first, second))
+                                    ui.label(format!("{:?} / {:?}", first, second))
                                 },
                             }
                                 .on_hover_cursor(egui::CursorIcon::PointingHand)
-                                .on_hover_text("Right click to filter out\nShift Right click to only show this");
+                                .on_hover_text(self.language.right_click_to_filter.clone());
 
                             let sprint = ui.label(format!("{:?}", achievement.sprint))
                                 .on_hover_cursor(egui::CursorIcon::PointingHand)
-                                .on_hover_text("Right click to filter out\nShift Right click to only show this");
+                                .on_hover_text(self.language.right_click_to_filter.clone());
 
                             let comment = match &achievement.comment {
                                 Some(comment) => {
@@ -191,7 +192,7 @@ impl Application {
                                 }
                             }
                                 .on_hover_cursor(egui::CursorIcon::PointingHand)
-                                .on_hover_text("Right click to filter out\nShift Right click to only show this");
+                                .on_hover_text(self.language.right_click_to_filter.clone());
                             ui.allocate_space(egui::vec2(10.0, 0.0));
 
                             if id.clicked_by(egui::PointerButton::Secondary) {

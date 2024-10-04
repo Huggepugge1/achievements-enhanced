@@ -1,17 +1,49 @@
 use eframe::CreationContext;
+use serde_json;
 
 use crate::achievement_csv;
 use crate::achievements::*;
+use crate::langs;
 use crate::progress_tracker::ProgressTracker;
 
 use std::fmt::Display;
 
 use eframe::egui;
 
+#[derive(Debug, Clone, serde::Deserialize, serde::Serialize)]
 pub struct Settings {
     pub font_size: f32,
     pub show_passed_labs: bool,
     pub dark_mode: bool,
+    pub language: langs::Langs,
+}
+
+impl Settings {
+    pub fn save(&self) {
+        let settings = serde_json::to_string(self).unwrap();
+        let _ = std::fs::write("settings.json", settings);
+    }
+
+    pub fn new() -> Self {
+        let file = std::fs::read("settings.json");
+        match file {
+            Ok(v) => match serde_json::from_slice(&v) {
+                Ok(v) => v,
+                Err(_) => Settings {
+                    font_size: 14.0,
+                    show_passed_labs: false,
+                    dark_mode: true,
+                    language: langs::Langs::English,
+                },
+            },
+            Err(_) => Settings {
+                font_size: 14.0,
+                show_passed_labs: false,
+                dark_mode: true,
+                language: langs::Langs::English,
+            },
+        }
+    }
 }
 
 #[derive(Debug)]
@@ -197,6 +229,7 @@ pub struct Application {
     pub sorting: Sort,
     pub filters: Filters,
     pub active_window: ActiveWindow,
+    pub language: langs::Language,
 }
 
 impl Application {
@@ -210,18 +243,20 @@ impl Application {
         };
 
         let progress_tracker = ProgressTracker::new(4, 5, &achievements);
+        let settings = Settings::new();
+        let language = settings.language;
 
         Self {
-            settings: Settings {
-                font_size: 14.0,
-                show_passed_labs: false,
-                dark_mode: true,
-            },
+            settings,
             achievements,
             progress_tracker,
             sorting: Sort::new(),
             filters: Filters::new(),
             active_window: ActiveWindow::Achievements,
+            language: match language {
+                langs::Langs::English => langs::get_english(),
+                langs::Langs::Swedish => langs::get_swedish(),
+            },
         }
     }
 
@@ -396,6 +431,15 @@ impl Application {
             .collect::<Vec<(usize, Achievement)>>();
 
         filtered_achievements
+    }
+}
+
+impl Application {
+    pub fn heading(&self, ui: &mut egui::Ui, text: impl Into<String>) -> egui::Response {
+        ui.label(egui::RichText::new(text).font(egui::FontId::new(
+            self.settings.font_size * 1.5,
+            egui::FontFamily::Proportional,
+        )))
     }
 }
 

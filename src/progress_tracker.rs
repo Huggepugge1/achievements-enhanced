@@ -40,7 +40,6 @@ const LABS: [&str; 32] = [
 #[derive(Clone, Debug)]
 pub struct Lab {
     pub date: DateTime<Local>,
-    pub done: bool,
     pub optimal: u8,
     pub minimum: u8,
     pub target: u8,
@@ -54,11 +53,8 @@ impl Lab {
                 .unwrap()
                 .with_timezone(&Local);
 
-        let done = date < Local::now();
-
         let lab = Lab {
             date,
-            done,
             optimal: 0,
             minimum: 0,
             target: 0,

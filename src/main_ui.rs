@@ -5,10 +5,12 @@ impl Application {
     pub fn menu_bar(&mut self, _ctx: &egui::Context, ui: &mut egui::Ui) {
         ui.style_mut().spacing.item_spacing = egui::vec2(30.0, 0.0);
         egui::menu::bar(ui, |ui| {
-            let file_button = ui.button(egui::RichText::new("File").font(egui::FontId::new(
-                self.settings.font_size * 1.5,
-                egui::FontFamily::Proportional,
-            )));
+            let file_button = ui.button(egui::RichText::new(self.language.file.clone()).font(
+                egui::FontId::new(
+                    self.settings.font_size * 1.5,
+                    egui::FontFamily::Proportional,
+                ),
+            ));
             let file_popup_id = ui.make_persistent_id("File popup");
             egui::containers::popup::popup_below_widget(
                 ui,
@@ -17,7 +19,7 @@ impl Application {
                 egui::containers::popup::PopupCloseBehavior::CloseOnClickOutside,
                 |ui| {
                     let save_button = ui
-                        .label("Save")
+                        .label(self.language.save.clone())
                         .on_hover_cursor(egui::CursorIcon::PointingHand);
                     if save_button.hovered() {
                         save_button.clone().highlight();
@@ -32,10 +34,12 @@ impl Application {
                     }
                 },
             );
-            let edit_button = ui.button(egui::RichText::new("Edit").font(egui::FontId::new(
-                self.settings.font_size * 1.5,
-                egui::FontFamily::Proportional,
-            )));
+            let edit_button = ui.button(egui::RichText::new(self.language.edit.clone()).font(
+                egui::FontId::new(
+                    self.settings.font_size * 1.5,
+                    egui::FontFamily::Proportional,
+                ),
+            ));
             let edit_popup_id = ui.make_persistent_id("Edit popup");
             egui::containers::popup::popup_below_widget(
                 ui,
@@ -44,7 +48,7 @@ impl Application {
                 egui::containers::popup::PopupCloseBehavior::CloseOnClickOutside,
                 |ui| {
                     let clear_done_button = ui
-                        .label("Clear Done")
+                        .label(self.language.clear_done.clone())
                         .on_hover_cursor(egui::CursorIcon::PointingHand);
                     if clear_done_button.hovered() {
                         clear_done_button.clone().highlight();
@@ -56,7 +60,7 @@ impl Application {
                         });
                     }
                     let clear_present_soon_button = ui
-                        .label("Clear Present Soon")
+                        .label(self.language.clear_present_soon.clone())
                         .on_hover_cursor(egui::CursorIcon::PointingHand);
                     if clear_present_soon_button.hovered() {
                         clear_present_soon_button.clone().highlight();
@@ -68,7 +72,7 @@ impl Application {
                         });
                     }
                     let clear_filters_button = ui
-                        .label("Clear Filters")
+                        .label(self.language.clear_filters.clone())
                         .on_hover_cursor(egui::CursorIcon::PointingHand);
                     if clear_filters_button.hovered() {
                         clear_filters_button.clone().highlight();
@@ -82,11 +86,12 @@ impl Application {
                 },
             );
 
-            let settings_button =
-                ui.button(egui::RichText::new("Settings").font(egui::FontId::new(
+            let settings_button = ui.button(
+                egui::RichText::new(self.language.settings.clone()).font(egui::FontId::new(
                     self.settings.font_size * 1.5,
                     egui::FontFamily::Proportional,
-                )));
+                )),
+            );
 
             let achievements_button =
                 ui.button(egui::RichText::new("Achievements").font(egui::FontId::new(

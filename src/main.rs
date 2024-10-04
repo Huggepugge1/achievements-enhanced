@@ -3,6 +3,7 @@ mod achievement_ui;
 mod achievements;
 mod application;
 mod default_values;
+mod langs;
 mod main_ui;
 mod progress_tracker;
 mod progress_tracker_ui;

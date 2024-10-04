@@ -1,8 +1,24 @@
 id,link,title,deadline,done,present_soon,grade,presenting_type,programming_language,sprint,comment
-A1,https://uppsala.instructure.com/courses/97453/pages/achievements#1,Procedurell abstraktion,,true,false,3,Lab,C,Sprint1,
-C7,https://uppsala.instructure.com/courses/97453/pages/achievements#7,Planering och uppföljning,,false,true,3,Studium,C,Project,
+P45,https://uppsala.instructure.com/courses/97453/pages/achievements#45,Gör en informell kodgranskning under fas 1,,false,true,3,"Lab, Studium",C,Sprint1,
+P46,https://uppsala.instructure.com/courses/97453/pages/achievements#46,Gör en informell kodgranskning under fas 2,,true,false,3,"Lab, Studium",C,Sprint3,
+U57,https://uppsala.instructure.com/courses/97453/pages/achievements#57,Byggverktyget Make,,false,false,3,"Lab, Studium",C,Sprint2,
+V58,https://uppsala.instructure.com/courses/97453/pages/achievements#58,Grundläggande terminalkommandon,,false,false,3,"Lab, Studium",Terminal,Sprint1,
+Y64,https://uppsala.instructure.com/courses/97453/pages/achievements#64,Använd en namngiven utvecklingsprocess och reflektera över utkomsten,,false,true,3,Report,C,Project,
+Y65,https://uppsala.instructure.com/courses/97453/pages/achievements#65,Skriv konsekvent bra kod,,false,true,3,Report,C,Project,
+Y66,https://uppsala.instructure.com/courses/97453/pages/achievements#66,Tillämpa kodgranskning löpande,,false,false,3,Report,C,Project,
+Y67,https://uppsala.instructure.com/courses/97453/pages/achievements#67,Delta aktivt i ett programmeringsprojekt,,false,false,3,Report,C,Project,
+Y68,https://uppsala.instructure.com/courses/97453/pages/achievements#68,Redovisa en fungerande projektuppgift,,false,false,3,Report,C,Project,
+Y69,https://uppsala.instructure.com/courses/97453/pages/achievements#69,Tillämpa testning under projektet,,false,false,3,Report,C,Project,
+Y60,https://uppsala.instructure.com/courses/97453/pages/achievements#60,Presentera projektet vid ett seminarium,"Jan 14, 2025",false,false,3,Special,C,Project,
+J29,https://uppsala.instructure.com/courses/97453/pages/achievements#29,Jämför två metoder för automatisk skräpsamling,,false,false,5,Special,Java,Sprint3,
+X61,https://uppsala.instructure.com/courses/97453/pages/achievements#61,Running Group Meetings Responsibly,,false,false,3,Special,Essä,Unclear,Kom till möten
+X63,https://uppsala.instructure.com/courses/97453/pages/achievements#63,Kommuniktion 1:M,"Sep 20, 2024",false,false,3,Special,Essä,Sprint1,Presentation till gruppen i forumet
+X59,https://uppsala.instructure.com/courses/97453/pages/achievements#59,Essä,"Dec 12, 2024",false,false,4,Special,Essä,Sprint1,Examineras via seminarium
+X62,https://uppsala.instructure.com/courses/97453/pages/achievements#62,Kommunikation 1:1,"Dec 16, 2024",false,false,5,Special,C / Java,Sprint1,Lek TA
+C7,https://uppsala.instructure.com/courses/97453/pages/achievements#7,Planering och uppföljning,,false,false,3,Studium,C,Project,
+A1,https://uppsala.instructure.com/courses/97453/pages/achievements#1,Procedurell abstraktion,,false,false,3,Lab,C,Sprint1,
 D9,https://uppsala.instructure.com/courses/97453/pages/achievements#9,Dokumentation,,false,false,3,Lab,C,Sprint2,
-E10,https://uppsala.instructure.com/courses/97453/pages/achievements#10,Implementera genericitet genom void-pekare,,false,true,3,Lab,C,Sprint1,
+E10,https://uppsala.instructure.com/courses/97453/pages/achievements#10,Implementera genericitet genom void-pekare,,false,false,3,Lab,C,Sprint1,
 F13,https://uppsala.instructure.com/courses/97453/pages/achievements#13,Iteration vs. rekursion,,false,false,3,Lab,C,Sprint1,
 G15,https://uppsala.instructure.com/courses/97453/pages/achievements#15,Aliasering,,false,false,3,Lab,C,Sprint1,
 J26,https://uppsala.instructure.com/courses/97453/pages/achievements#26,Allokering på stacken vs. på heapen,,false,false,3,Lab,C,Sprint1,
@@ -10,21 +26,11 @@ J27,https://uppsala.instructure.com/courses/97453/pages/achievements#27,Manuell 
 M36,https://uppsala.instructure.com/courses/97453/pages/achievements#36,C:s array-notation och pekararitmetik,,false,false,3,Lab,C,Sprint1,
 M37,https://uppsala.instructure.com/courses/97453/pages/achievements#37,Använda pekare för att skapa länkade strukturer,,false,false,3,Lab,C,Sprint1,
 M38,https://uppsala.instructure.com/courses/97453/pages/achievements#38,Värdeöverföring via pekare,,false,false,3,Lab,C,Sprint1,
-P45,https://uppsala.instructure.com/courses/97453/pages/achievements#45,Gör en informell kodgranskning under fas 1,,false,false,3,"Lab, Studium",C,Sprint1,
-P46,https://uppsala.instructure.com/courses/97453/pages/achievements#46,Gör en informell kodgranskning under fas 2,,false,false,3,"Lab, Studium",C,Sprint3,
 Q49,https://uppsala.instructure.com/courses/97453/pages/achievements#49,Enhetstestning,,false,false,3,Lab,C,Sprint1,
 R52,https://uppsala.instructure.com/courses/97453/pages/achievements#52,Debuggning med gdb,,false,false,3,Lab,C,Sprint1,
-U57,https://uppsala.instructure.com/courses/97453/pages/achievements#57,Byggverktyget Make,,false,false,3,"Lab, Studium",C,Sprint2,
-Y64,https://uppsala.instructure.com/courses/97453/pages/achievements#64,Använd en namngiven utvecklingsprocess och reflektera över utkomsten,,false,false,3,Report,C,Project,
-Y65,https://uppsala.instructure.com/courses/97453/pages/achievements#65,Skriv konsekvent bra kod,,false,false,3,Report,C,Project,
-Y66,https://uppsala.instructure.com/courses/97453/pages/achievements#66,Tillämpa kodgranskning löpande,,false,false,3,Report,C,Project,
-Y67,https://uppsala.instructure.com/courses/97453/pages/achievements#67,Delta aktivt i ett programmeringsprojekt,,false,false,3,Report,C,Project,
-Y68,https://uppsala.instructure.com/courses/97453/pages/achievements#68,Redovisa en fungerande projektuppgift,,false,false,3,Report,C,Project,
-Y69,https://uppsala.instructure.com/courses/97453/pages/achievements#69,Tillämpa testning under projektet,,false,false,3,Report,C,Project,
 Z91,https://uppsala.instructure.com/courses/97453/pages/achievements#91,Inlupp 1,"Oct 18, 2024",false,false,3,Lab,C,Sprint1,
 Z92,https://uppsala.instructure.com/courses/97453/pages/achievements#92,Inlupp 2,"Nov 15, 2024",false,false,3,Lab,C,Sprint2,
 Z93,https://uppsala.instructure.com/courses/97453/pages/achievements#93,Inlupp 3,"Dec 06, 2024",false,false,3,Lab,C,Sprint3,
-Y60,https://uppsala.instructure.com/courses/97453/pages/achievements#60,Presentera projektet vid ett seminarium,"Jan 14, 2025",false,false,3,Special,C,Project,
 A3,https://uppsala.instructure.com/courses/97453/pages/achievements#3,Informationsgömning,,false,false,4,Lab,C,Sprint2,
 A8,https://uppsala.instructure.com/courses/97453/pages/achievements#8,Gränssnitt mellan moduler,,false,false,4,Lab,C,Sprint2,
 F14,https://uppsala.instructure.com/courses/97453/pages/achievements#14,Svansrekursion,,false,false,4,Lab,C,Sprint1,
@@ -49,18 +55,12 @@ I25,https://uppsala.instructure.com/courses/97453/pages/achievements#25,Egendefi
 B6,https://uppsala.instructure.com/courses/97453/pages/achievements#6,Genomskärande åtaganden och arv,,false,false,5,Lab,Java,Sprint3,
 G17,https://uppsala.instructure.com/courses/97453/pages/achievements#17,Nästlade och inre klasser,,false,false,5,Lab,Java,Sprint3,
 H21,https://uppsala.instructure.com/courses/97453/pages/achievements#21,"Abstrakta klasser, metoder och interface",,false,false,5,Lab,Java,Sprint3,
-J29,https://uppsala.instructure.com/courses/97453/pages/achievements#29,Jämför två metoder för automatisk skräpsamling,,false,false,5,Special,Java,Sprint3,
 T56,https://uppsala.instructure.com/courses/97453/pages/achievements#56,Continuous Integration,,false,false,5,Lab,Git,Sprint1,
-V58,https://uppsala.instructure.com/courses/97453/pages/achievements#58,Grundläggande terminalkommandon,,false,false,3,"Lab, Studium",Terminal,Sprint1,
-X61,https://uppsala.instructure.com/courses/97453/pages/achievements#61,Running Group Meetings Responsibly,,false,false,3,Special,Essä,Unclear,Kom till möten
-X63,https://uppsala.instructure.com/courses/97453/pages/achievements#63,Kommuniktion 1:M,"Sep 20, 2024",false,false,3,Special,Essä,Sprint1,Presentation till gruppen i forumet
-X59,https://uppsala.instructure.com/courses/97453/pages/achievements#59,Essä,"Dec 12, 2024",false,false,4,Special,Essä,Sprint1,Examineras via seminarium
-N40,https://uppsala.instructure.com/courses/97453/pages/achievements#40,"Kompilering, länkning och interpretering",,false,false,3,Lab,C&Java,Sprint3,
-H20,https://uppsala.instructure.com/courses/97453/pages/achievements#20,Värdeöverföring,,false,false,4,Lab,C&Java,Sprint3,
-J28,https://uppsala.instructure.com/courses/97453/pages/achievements#28,Manuell vs. automatisk minneshantering,,false,false,4,Lab,C&Java,Sprint3,
-N41,https://uppsala.instructure.com/courses/97453/pages/achievements#41,Bindning,,false,false,4,Lab,C&Java,Sprint3,
-O42,https://uppsala.instructure.com/courses/97453/pages/achievements#42,Profilering och optimering 1/3,,false,false,3,Lab,C/Java,Sprint1,Gärna under projekt
-T55,https://uppsala.instructure.com/courses/97453/pages/achievements#55,Använda en utvecklingsmiljö på ett effektivt sätt,,false,false,3,Lab,C/Java,Sprint1,
-O43,https://uppsala.instructure.com/courses/97453/pages/achievements#43,Profilering och optimering 2/3,,false,false,4,Lab,C/Java,Sprint1,Gärna under projekt
-O44,https://uppsala.instructure.com/courses/97453/pages/achievements#44,Profilering och optimering 3/3,,false,false,5,Lab,C/Java,Sprint1,Gärna under projekt
-X62,https://uppsala.instructure.com/courses/97453/pages/achievements#62,Kommunikation 1:1,"Dec 16, 2024",false,false,5,Special,C/Java,Sprint1,Lek TA
+N40,https://uppsala.instructure.com/courses/97453/pages/achievements#40,"Kompilering, länkning och interpretering",,false,false,3,Lab,C & Java,Sprint3,
+H20,https://uppsala.instructure.com/courses/97453/pages/achievements#20,Värdeöverföring,,false,false,4,Lab,C & Java,Sprint3,
+J28,https://uppsala.instructure.com/courses/97453/pages/achievements#28,Manuell vs. automatisk minneshantering,,false,false,4,Lab,C & Java,Sprint3,
+N41,https://uppsala.instructure.com/courses/97453/pages/achievements#41,Bindning,,false,false,4,Lab,C & Java,Sprint3,
+O42,https://uppsala.instructure.com/courses/97453/pages/achievements#42,Profilering och optimering 1/3,,false,false,3,Lab,C / Java,Sprint1,Gärna under projekt
+T55,https://uppsala.instructure.com/courses/97453/pages/achievements#55,Använda en utvecklingsmiljö på ett effektivt sätt,,false,false,3,Lab,C / Java,Sprint1,
+O43,https://uppsala.instructure.com/courses/97453/pages/achievements#43,Profilering och optimering 2/3,,false,false,4,Lab,C / Java,Sprint1,Gärna under projekt
+O44,https://uppsala.instructure.com/courses/97453/pages/achievements#44,Profilering och optimering 3/3,,false,false,5,Lab,C / Java,Sprint1,Gärna under projekt
