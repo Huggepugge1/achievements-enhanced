@@ -54,6 +54,7 @@ pub struct Language {
     pub target_grade: String,
     pub max_per_lab: String,
     pub language: String,
+    pub git: String,
 }
 
 pub fn get_english() -> Language {
@@ -98,6 +99,7 @@ pub fn get_english() -> Language {
         target_grade: String::from("Target Grade"),
         max_per_lab: String::from("Max Achievements Per Lab"),
         language: String::from("Language"),
+        git: String::from("Use Git To Sync"),
     }
 }
 
@@ -145,6 +147,6 @@ pub fn get_swedish() -> Language {
         target_grade: String::from("Målbetyg"),
         max_per_lab: String::from("Max Achievements Per Lab"),
         language: String::from("Språk"),
+        git: String::from("Använd Git För Att Synka"),
     }
 }
-

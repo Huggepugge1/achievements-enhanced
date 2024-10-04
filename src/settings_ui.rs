@@ -60,6 +60,13 @@ impl Application {
                         };
                         self.settings.save();
                     }
+                    ui.end_row();
+
+                    self.heading(ui, self.language.git.clone());
+                    if ui.button(self.settings.git.to_string()).clicked() {
+                        self.settings.git = !self.settings.git;
+                        self.settings.save();
+                    }
                 });
         });
     }

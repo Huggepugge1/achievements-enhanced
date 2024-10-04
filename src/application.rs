@@ -3,6 +3,7 @@ use serde_json;
 
 use crate::achievement_csv;
 use crate::achievements::*;
+use crate::git;
 use crate::langs;
 use crate::progress_tracker::ProgressTracker;
 
@@ -16,6 +17,7 @@ pub struct Settings {
     pub show_passed_labs: bool,
     pub dark_mode: bool,
     pub language: langs::Langs,
+    pub git: bool,
 }
 
 impl Settings {
@@ -34,6 +36,7 @@ impl Settings {
                     show_passed_labs: false,
                     dark_mode: true,
                     language: langs::Langs::English,
+                    git: false,
                 },
             },
             Err(_) => Settings {
@@ -41,6 +44,7 @@ impl Settings {
                 show_passed_labs: false,
                 dark_mode: true,
                 language: langs::Langs::English,
+                git: false,
             },
         }
     }
@@ -246,6 +250,10 @@ impl Application {
         let settings = Settings::new();
         let language = settings.language;
 
+        if settings.git {
+            git::git_pull();
+        }
+
         Self {
             settings,
             achievements,
@@ -448,6 +456,12 @@ impl eframe::App for Application {
         if let Err(e) = self.save_achievements() {
             eprintln!("Error saving achievements: {}", e);
         };
+
+        if self.settings.git {
+            git::git_add();
+            git::git_commit();
+            git::git_push();
+        }
     }
 
     fn update(&mut self, ctx: &eframe::egui::Context, _frame: &mut eframe::Frame) {
