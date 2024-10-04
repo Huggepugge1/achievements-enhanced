@@ -15,13 +15,13 @@ use eframe::NativeOptions;
 fn main() -> Result<(), eframe::Error> {
     #[cfg(target_os = "windows")]
     let mut child = std::process::Command::new("cmd")
-        .args(&["/C", "python3", "updater.py", "v2.0.0"])
+        .args(&["/C", "updater.exe", "v2.0.0"])
         .spawn()
         .expect("Failed to run updater");
 
     #[cfg(target_os = "linux")]
-    let mut child = std::process::Command::new("python3")
-        .args(&["updater.py", "v2.0.0"])
+    let mut child = std::process::Command::new("sh")
+        .args(&["updater", "v2.0.0"])
         .spawn()
         .expect("Failed to run updater");
 
