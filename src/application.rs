@@ -290,12 +290,11 @@ impl Application {
                 comment: achievement.comment.clone(),
             };
             wtr.serialize(serializable_achievement)?;
-
-            if self.settings.git {
-                git::git_add();
-                git::git_commit();
-                git::git_push();
-            }
+        }
+        if self.settings.git {
+            git::git_add();
+            git::git_commit();
+            git::git_push();
         }
         Ok(())
     }
