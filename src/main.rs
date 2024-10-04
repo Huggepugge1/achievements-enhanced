@@ -13,6 +13,18 @@ mod settings_ui;
 use eframe::NativeOptions;
 
 fn main() -> Result<(), eframe::Error> {
+    #[cfg(target_os = "windows")]
+    let _ = std::process::Command::new("cmd")
+        .args(&["/C", "python3", "updater.py", "v2.0.0"])
+        .output()
+        .expect("failed to execute process");
+
+    #[cfg(target_os = "linux")]
+    let _ = std::process::Command::new("python3")
+        .args(&["updater.py", "v2.0.0"])
+        .output()
+        .expect("failed to execute process");
+
     let mut native_options = NativeOptions::default();
 
     native_options.viewport.maximized = Some(true);
