@@ -14,7 +14,12 @@ mod updater;
 use eframe::NativeOptions;
 
 fn main() -> Result<(), eframe::Error> {
-    let _ = updater::update();
+    let update_available = updater::check_for_update().unwrap();
+    let _update_successful = if update_available {
+        updater::update()
+    } else {
+        Ok(())
+    };
 
     let mut native_options = NativeOptions::default();
 
