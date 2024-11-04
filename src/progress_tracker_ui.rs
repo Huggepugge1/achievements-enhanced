@@ -1,3 +1,4 @@
+use crate::achievements::Sprint;
 use crate::application::Application;
 use crate::progress_tracker;
 
@@ -154,6 +155,79 @@ impl Application {
                             .filter(|e| e.grade == 5 && e.done)
                             .count(),
                         self.achievements.iter().filter(|e| e.grade == 5).count(),
+                    ));
+                    ui.label(format!(
+                        "{}: {}/{}",
+                        self.language.sprint1,
+                        self.achievements
+                            .iter()
+                            .filter(|e| e.sprint == Sprint::Sprint1 && e.done)
+                            .count(),
+                        self.achievements
+                            .iter()
+                            .filter(|e| e.sprint == Sprint::Sprint1)
+                            .count(),
+                    ));
+                    ui.label(format!(
+                        "{}: {}/{}",
+                        self.language.sprint2,
+                        self.achievements
+                            .iter()
+                            .filter(|e| e.sprint == Sprint::Sprint2 && e.done)
+                            .count(),
+                        self.achievements
+                            .iter()
+                            .filter(|e| e.sprint == Sprint::Sprint2)
+                            .count(),
+                    ));
+                    ui.label(format!(
+                        "{}: {}/{}",
+                        self.language.sprint3,
+                        self.achievements
+                            .iter()
+                            .filter(|e| e.sprint == Sprint::Sprint3 && e.done)
+                            .count(),
+                        self.achievements
+                            .iter()
+                            .filter(|e| e.sprint == Sprint::Sprint3)
+                            .count(),
+                    ));
+                    ui.label(format!(
+                        "{}: {}/{}",
+                        self.language.sprint4,
+                        self.achievements
+                            .iter()
+                            .filter(|e| e.sprint == Sprint::Sprint4 && e.done)
+                            .count(),
+                        self.achievements
+                            .iter()
+                            .filter(|e| e.sprint == Sprint::Sprint4)
+                            .count(),
+                    ));
+                    ui.label(format!(
+                        "{}: {}/{}",
+                        self.language.project,
+                        self.achievements
+                            .iter()
+                            .filter(|e| e.sprint == Sprint::Project && e.done)
+                            .count(),
+                        self.achievements
+                            .iter()
+                            .filter(|e| e.sprint == Sprint::Project)
+                            .count(),
+                    ));
+                    ui.label(format!(
+                        "{}: {}/{}",
+                        self.language.other,
+                        self.achievements
+                            .iter()
+                            .filter(|e| (e.sprint == Sprint::Unclear || e.sprint == Sprint::Lab)
+                                && e.done)
+                            .count(),
+                        self.achievements
+                            .iter()
+                            .filter(|e| e.sprint == Sprint::Unclear || e.sprint == Sprint::Lab)
+                            .count(),
                     ));
                     ui.label(format!(
                         "{}: {}/{}",
