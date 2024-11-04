@@ -48,6 +48,10 @@ pub struct Language {
     pub click_to_show_achievements_done: String,
     pub click_to_show_achievements_left: String,
     pub lab: String,
+    pub grade3: String,
+    pub grade4: String,
+    pub grade5: String,
+    pub total: String,
 
     pub font_size: String,
     pub dark_mode: String,
@@ -93,6 +97,10 @@ pub fn get_english() -> Language {
         click_to_show_achievements_done: String::from("Click to show achievements done"),
         click_to_show_achievements_left: String::from("Click to show achievements left"),
         lab: String::from("Lab"),
+        grade3: String::from("Grade 3"),
+        grade4: String::from("Grade 4"),
+        grade5: String::from("Grade 5"),
+        total: String::from("Total"),
 
         font_size: String::from("Font Size"),
         dark_mode: String::from("Dark Mode"),
@@ -141,6 +149,10 @@ pub fn get_swedish() -> Language {
             "Klicka för att visa kvarvarande achievements",
         ),
         lab: String::from("Lab"),
+        grade3: String::from("Betyg 3"),
+        grade4: String::from("Betyg 4"),
+        grade5: String::from("Betyg 5"),
+        total: String::from("Totalt"),
 
         font_size: String::from("Textstorlek"),
         dark_mode: String::from("Mörkt Tema"),

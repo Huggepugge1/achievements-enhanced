@@ -127,6 +127,40 @@ impl Application {
                                 }
                             }
                         });
+                    ui.allocate_space(egui::vec2(0.0, 50.0));
+                    ui.label(format!(
+                        "{}: {}/{}",
+                        self.language.grade3,
+                        self.achievements
+                            .iter()
+                            .filter(|e| e.grade == 3 && e.done)
+                            .count(),
+                        self.achievements.iter().filter(|e| e.grade == 3).count(),
+                    ));
+                    ui.label(format!(
+                        "{}: {}/{}",
+                        self.language.grade4,
+                        self.achievements
+                            .iter()
+                            .filter(|e| e.grade == 4 && e.done)
+                            .count(),
+                        self.achievements.iter().filter(|e| e.grade == 4).count(),
+                    ));
+                    ui.label(format!(
+                        "{}: {}/{}",
+                        self.language.grade5,
+                        self.achievements
+                            .iter()
+                            .filter(|e| e.grade == 5 && e.done)
+                            .count(),
+                        self.achievements.iter().filter(|e| e.grade == 5).count(),
+                    ));
+                    ui.label(format!(
+                        "{}: {}/{}",
+                        self.language.total,
+                        self.achievements.iter().filter(|e| e.done).count(),
+                        self.achievements.len(),
+                    ));
                 });
         });
     }
