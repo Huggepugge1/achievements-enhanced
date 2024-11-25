@@ -55,6 +55,8 @@ pub struct Language {
     pub max_per_lab: String,
     pub language: String,
     pub git: String,
+    pub burndown: String,
+    pub generate: String,
 }
 
 pub fn get_english() -> Language {
@@ -100,6 +102,8 @@ pub fn get_english() -> Language {
         max_per_lab: String::from("Max Achievements Per Lab"),
         language: String::from("Language"),
         git: String::from("Use Git To Sync"),
+        burndown: String::from("Burndown csv"),
+        generate: String::from("Generate"),
     }
 }
 
@@ -148,5 +152,7 @@ pub fn get_swedish() -> Language {
         max_per_lab: String::from("Max Achievements Per Lab"),
         language: String::from("Språk"),
         git: String::from("Använd Git För Att Synka"),
+        burndown: String::from("Burndown csv"),
+        generate: String::from("Generera"),
     }
 }

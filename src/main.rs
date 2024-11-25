@@ -14,8 +14,6 @@ mod settings_ui;
 use eframe::NativeOptions;
 
 fn main() -> Result<(), eframe::Error> {
-    burndown::generate();
-    std::process::exit(0);
     let mut native_options = NativeOptions::default();
 
     native_options.viewport.maximized = Some(true);

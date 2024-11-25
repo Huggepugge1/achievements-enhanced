@@ -1,4 +1,5 @@
 use crate::application::Application;
+use crate::burndown;
 use crate::langs::{get_english, get_swedish, Langs};
 use eframe::egui;
 
@@ -66,6 +67,12 @@ impl Application {
                     if ui.button(self.settings.git.to_string()).clicked() {
                         self.settings.git = !self.settings.git;
                         self.settings.save();
+                    }
+                    ui.end_row();
+
+                    self.heading(ui, self.language.burndown.clone());
+                    if ui.button(self.language.generate.to_string()).clicked() {
+                        burndown::generate();
                     }
                 });
         });
