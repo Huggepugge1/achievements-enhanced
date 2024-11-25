@@ -105,7 +105,7 @@ pub fn git_push() {
 pub fn git_get_commits() -> Vec<(String, DateTime<Local>)> {
     println!("Getting commits from git");
 
-    println!("command: git log --format=\"%h %as\"");
+    println!("command: git log --format=\"%h %ai\"");
 
     let output = if cfg!(target_os = "windows") {
         Command::new("cmd")
@@ -126,7 +126,8 @@ pub fn git_get_commits() -> Vec<(String, DateTime<Local>)> {
         .trim()
         .split("\n")
         .map(|s| {
-            let splitted = s.split_once(" ").unwrap();
+            let trimmed = s.replace("\"", "");
+            let splitted = trimmed.split_once(" ").unwrap();
             println!("splitted: {:?}", splitted);
             (
                 splitted.0.to_string(),
