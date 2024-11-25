@@ -2,7 +2,7 @@ use crate::achievements::{Achievement, AchievementPresention, PresentationType};
 
 use chrono::{DateTime, Local};
 
-const LABS: [&str; 32] = [
+pub const LABS: [&str; 32] = [
     "Sep 2, 2024",
     "Sep 4, 2024",
     "Sep 5, 2024",
@@ -53,15 +53,13 @@ impl Lab {
                 .unwrap()
                 .with_timezone(&Local);
 
-        let lab = Lab {
+        Lab {
             date,
             optimal: 0,
             minimum: 0,
             target: 0,
             current_minimum: 0,
-        };
-
-        lab
+        }
     }
 }
 
